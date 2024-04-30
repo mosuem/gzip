@@ -1,6 +1,7 @@
 name: gzip
 description: A lightweight package for gzip compression.
 version: 0.1.0
+repository: https://github.com/mosuem/gzip
 
 environment:
   sdk: ^3.2.0
