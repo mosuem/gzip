@@ -4,10 +4,8 @@ import 'dart:typed_data';
 import 'package:web/web.dart';
 
 class GZip {
-  final compressionStream = CompressionStream('gzip');
-  final decompressionStream = DecompressionStream('gzip');
-
   Future<List<int>> compress(Uint8List data) async {
+    final compressionStream = CompressionStream('gzip');
     final reader = _blob(data)
         .stream()
         .pipeThrough(ReadableWritablePair(
@@ -19,6 +17,7 @@ class GZip {
   }
 
   Future<List<int>> decompress(Uint8List data) async {
+    final decompressionStream = DecompressionStream('gzip');
     final reader = _blob(data)
         .stream()
         .pipeThrough(ReadableWritablePair(
