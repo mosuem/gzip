@@ -1,21 +1,17 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:gzip/gzip.dart';
 import 'package:test/test.dart';
 
+import 'helper_mock.dart'
+    if (dart.library.io) 'helper_io.dart'
+    if (dart.library.js_interop) 'helper_web.dart';
+
 const enc = Utf8Encoder();
 void main() {
   for (final (:name, :input, output: outputList) in cases) {
-    const osBit = 9;
-    outputList[osBit] = switch (Platform.operatingSystem) {
-      'linux' => 3,
-      'macos' => 19,
-      'windows' => 10,
-      String() => throw UnimplementedError('No id for this platform found'),
-    };
-    final output = Uint8List.fromList(outputList);
+    final output = switchPlatformBit(outputList);
     test(
       'Compress $name',
       () async => expect(await GZip().compress(input), output),
