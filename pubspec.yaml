@@ -1,13 +1,13 @@
 name: gzip
 description: A lightweight package for gzip compression.
-version: 0.2.0
+version: 0.3.0
 repository: https://github.com/mosuem/gzip
 
 environment:
   sdk: ^3.3.0
 
 dependencies:
-  web: ^0.5.1
+  web: ^1.1.0
 
 dev_dependencies:
   dart_flutter_team_lints: ^2.1.1
