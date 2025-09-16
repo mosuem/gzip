@@ -1,3 +1,7 @@
+## 1.0.0
+
+- Upgrade SDK version and make WASM-ready.
+ 
 ## 0.3.0
 
 - Upgrade dependency on `package:web`.
