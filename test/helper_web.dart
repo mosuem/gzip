@@ -8,11 +8,11 @@ import 'package:os_detect/os_detect.dart';
 
 Uint8List switchPlatformBit(List<int> input) {
   const osBit = 9;
-  if (operatingSystemVersion.contains('linux')) {
+  if (operatingSystemVersion.contains('Linux')) {
     input[osBit] = 3;
-  } else if (operatingSystemVersion.contains('macos')) {
+  } else if (operatingSystemVersion.contains('Macintosh')) {
     input[osBit] = 19;
-  } else if (operatingSystemVersion.contains('windows')) {
+  } else if (operatingSystemVersion.contains('Windows')) {
     input[osBit] = 10;
   } else {
     throw UnimplementedError(
