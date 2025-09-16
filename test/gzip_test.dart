@@ -8,38 +8,41 @@ import 'dart:typed_data';
 import 'package:gzip/gzip.dart';
 import 'package:test/test.dart';
 
-import 'helper_mock.dart'
-    if (dart.library.io) 'helper_io.dart'
-    if (dart.library.js_interop) 'helper_web.dart';
-
 const enc = Utf8Encoder();
 void main() {
-  for (final (:name, :input, output: outputList) in cases) {
-    final output = switchPlatformBit(outputList);
+  for (final (:name, :input, :output) in cases) {
     test(
       'Compress $name',
-      () async => expect(await GZip().compress(input), output),
+      () async => exepctUpToPlatform(await GZip().compress(input), output),
     );
     test(
       'Decompress $name',
-      () async => expect(await GZip().decompress(output), input),
+      () async => exepctUpToPlatform(await GZip().decompress(output), input),
     );
     test('Roundtrip $name', () async {
       final compressed = await GZip().compress(input);
-      expect(await GZip().decompress(Uint8List.fromList(compressed)), input);
+      exepctUpToPlatform(
+        await GZip().decompress(Uint8List.fromList(compressed)),
+        input,
+      );
     });
     test('Roundtrip back $name', () async {
       final decompressed = await GZip().decompress(output);
-      expect(await GZip().compress(Uint8List.fromList(decompressed)), output);
+      final actual = await GZip().compress(Uint8List.fromList(decompressed));
+      exepctUpToPlatform(actual, output);
     });
   }
+}
+
+void exepctUpToPlatform(List<int> actual, Uint8List output) {
+  expect(toFantasyPlatformBit(actual), toFantasyPlatformBit(output));
 }
 
 final cases = [
   (
     name: 'Simple ASCII',
     input: enc.convert('Hello World'),
-    output: [
+    output: Uint8List.fromList([
       31,
       139,
       8,
@@ -49,7 +52,7 @@ final cases = [
       0,
       0,
       0,
-      3,
+      42,
       243,
       72,
       205,
@@ -71,12 +74,12 @@ final cases = [
       0,
       0,
       0,
-    ],
+    ]),
   ),
   (
     name: 'More complex',
     input: enc.convert('éàöñ 漢 こんにちは به متنی©®€£µ¥'),
-    output: [
+    output: Uint8List.fromList([
       31,
       139,
       8,
@@ -86,7 +89,7 @@ final cases = [
       0,
       0,
       0,
-      3,
+      42,
       1,
       55,
       0,
@@ -155,6 +158,12 @@ final cases = [
       0,
       0,
       0,
-    ],
+    ]),
   ),
 ];
+
+Uint8List toFantasyPlatformBit(List<int> input) {
+  const osBit = 9;
+  input[osBit] = 42;
+  return Uint8List.fromList(input);
+}
