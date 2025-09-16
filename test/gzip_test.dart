@@ -3,6 +3,7 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:gzip/gzip.dart';
@@ -35,6 +36,14 @@ void main() {
   }
 }
 
+final osHeader = Platform.isLinux
+    ? 3
+    : Platform.isMacOS
+    ? 19
+    : Platform.isWindows
+    ? 10
+    : -1;
+
 final cases = [
   (
     name: 'Simple ASCII',
@@ -49,7 +58,7 @@ final cases = [
       0,
       0,
       0,
-      3,
+      osHeader,
       243,
       72,
       205,
@@ -86,7 +95,7 @@ final cases = [
       0,
       0,
       0,
-      3,
+      osHeader,
       1,
       55,
       0,
