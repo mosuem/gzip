@@ -4,4 +4,20 @@
 
 import 'dart:typed_data';
 
-Uint8List switchPlatformBit(List<int> input) => Uint8List.fromList(input);
+import 'package:os_detect/os_detect.dart';
+
+Uint8List switchPlatformBit(List<int> input) {
+  const osBit = 9;
+  if (operatingSystemVersion.contains('linux')) {
+    input[osBit] = 3;
+  } else if (operatingSystemVersion.contains('macos')) {
+    input[osBit] = 19;
+  } else if (operatingSystemVersion.contains('windows')) {
+    input[osBit] = 10;
+  } else {
+    throw UnimplementedError(
+      'No OS bit for platform $operatingSystemVersion found',
+    );
+  }
+  return Uint8List.fromList(input);
+}
