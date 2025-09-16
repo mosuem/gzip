@@ -24,20 +24,14 @@ void main() {
       'Decompress $name',
       () async => expect(await GZip().decompress(output), input),
     );
-    test(
-      'Roundtrip $name',
-      () async {
-        final compressed = await GZip().compress(input);
-        expect(await GZip().decompress(Uint8List.fromList(compressed)), input);
-      },
-    );
-    test(
-      'Roundtrip back $name',
-      () async {
-        final decompressed = await GZip().decompress(output);
-        expect(await GZip().compress(Uint8List.fromList(decompressed)), output);
-      },
-    );
+    test('Roundtrip $name', () async {
+      final compressed = await GZip().compress(input);
+      expect(await GZip().decompress(Uint8List.fromList(compressed)), input);
+    });
+    test('Roundtrip back $name', () async {
+      final decompressed = await GZip().decompress(output);
+      expect(await GZip().compress(Uint8List.fromList(decompressed)), output);
+    });
   }
 }
 
@@ -76,7 +70,7 @@ final cases = [
       11,
       0,
       0,
-      0
+      0,
     ],
   ),
   (
@@ -160,7 +154,7 @@ final cases = [
       55,
       0,
       0,
-      0
+      0,
     ],
   ),
 ];

@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        sdk: [3.3.0, dev]
+        sdk: [3.9.0, dev]
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
       - uses: dart-lang/setup-dart@fedb1266e91cf51be2fdb382869461a434b920a3
@@ -39,15 +39,8 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        sdk: [3.3.0, dev]
-        platform: [vm, chrome]
-        exclude:
-          # We only run Chrome tests on Linux. No need to run them
-          # on Windows and Mac because they are platform independent.
-          - os: windows-latest
-            platform: chrome
-          - os: macos-latest
-            platform: chrome
+        sdk: [3.9.0, dev]
+
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
       - uses: dart-lang/setup-dart@fedb1266e91cf51be2fdb382869461a434b920a3
@@ -61,4 +54,10 @@ jobs:
         run: dart pub get
 
       - name: Run tests
-        run: dart test --platform ${{ matrix.platform }}
+        run: dart test
+
+      - name: Run tests
+        run: dart test --platform chrome
+
+      - name: Run wasm tests
+        run: dart test --platform chrome --compiler dart2wasm
