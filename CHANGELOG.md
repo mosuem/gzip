@@ -1,3 +1,7 @@
+## 1.1.0
+
+- Return `Uint8List` and use `BytesBuilder` on the web [#3](https://github.com/mosuem/gzip/issues/3).
+
 ## 1.0.0
 
 - Upgrade SDK version and make WASM-ready.

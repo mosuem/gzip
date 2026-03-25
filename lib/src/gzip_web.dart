@@ -8,7 +8,7 @@ import 'dart:typed_data';
 import 'package:web/web.dart';
 
 class GZip {
-  Future<List<int>> compress(Uint8List data) async {
+  Future<Uint8List> compress(Uint8List data) async {
     final compressionStream = CompressionStream('gzip');
     final reader =
         _blob(data)
@@ -24,7 +24,7 @@ class GZip {
     return await _readUntilDone(reader);
   }
 
-  Future<List<int>> decompress(Uint8List data) async {
+  Future<Uint8List> decompress(Uint8List data) async {
     final decompressionStream = DecompressionStream('gzip');
     final reader =
         _blob(data)
@@ -40,18 +40,21 @@ class GZip {
     return await _readUntilDone(reader);
   }
 
-  Future<List<int>> _readUntilDone(ReadableStreamDefaultReader reader) async {
-    final values = <int>[];
+  Future<Uint8List> _readUntilDone(ReadableStreamDefaultReader reader) async {
+    final builder = BytesBuilder(copy: false);
+
     var isDone = false;
     while (!isDone) {
       final readChunk = await reader.read().toDart;
-      if (readChunk.value != null) {
-        final value = readChunk.value as JSUint8Array;
-        values.addAll(value.toDart);
+      final uint8Array = readChunk.value as JSUint8Array?;
+
+      if (uint8Array != null) {
+        builder.add(uint8Array.toDart);
       }
       isDone = readChunk.done;
     }
-    return values;
+
+    return builder.takeBytes();
   }
 
   Blob _blob(Uint8List data) =>
